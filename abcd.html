@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        /* Container for the four images */
+        .image-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            width: 200%;
+            max-width: 800px;
+        }
+
+        /* Style for each image */
+        .image-container img {
+            width: 700px; /* Adjust image width as needed */
+            height: 700px; /* Adjust image height as needed */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            margin: 600px; /* Adjust the margin to increase the gap between images */
+        }
+
+        /* Position each image in a corner */
+        .top-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .bottom-left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .bottom-right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        /* Hover effect for images */
+        .image-container img:hover {
+            transform: scale(1.2); /* Increase size on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container">
+        <a href="new_page1.html" class="top-left">
+            <img src="children.avif" alt="Image 1">
+        </a>
+        <a href="new_page2.html" class="top-right">
+            <img src="adolescent.avif" alt="Image 2">
+        </a>
+        <a href="new_page3.html" class="bottom-left">
+            <img src="gym.avif" alt="Image 3">
+        </a>
+        <a href="new_page4.html" class="bottom-right">
+            <img src="old.avif" alt="Image 4">
+        </a>
+    </div>
+</body>
+</html>

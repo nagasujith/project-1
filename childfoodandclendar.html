@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Google Calendar and Food Recipes</title>
+  <meta charset="utf-8" />
+  <style>
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    body {
+      background-color: bisque;
+      font-family: Arial, sans-serif;
+    }
+
+    .meal-category {
+      background-color: #f0f0f0;
+      padding: 10px;
+    }
+
+    .breakfast-list,
+    .lunch-list,
+    .dinner-list {
+      display: flex;
+      overflow-x: auto;
+      justify-content: center;
+    }
+
+    .meal-item {
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin: 20px;
+      background-color: #fff;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .meal-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .food-image {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .food-info {
+      margin-top: 15px;
+      font-size: 16px;
+      color: #666;
+    }
+
+    .recipe-link {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      color: #3498db;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Breakfast Foods</h1>
+  <div class="meal-category">
+    <h2>Breakfast</h2>
+    <div class="breakfast-list">
+      <div class="meal-item"
+        onclick="addEventToCalendar('Kefir Smoothie', '2023-09-10T07:00:00', 'Asia/Kolkata', 'Ingredients:\n1 cup kefir\n1 banana\n1/2 cup mixed berries\n1 tablespoon honey\n\nInstructions:\nBlend all the ingredients until smooth. Pour into a glass and enjoy!')">
+        <img class="food-image" src="kefirsmoothie.jpg" alt="Kefir Smoothie">
+        <div class="food-info">
+          <p>Kefir Smoothie</p>
+          <p>Calories: 120</p>
+          <p>Contains: Vitamin A, Fiber</p>
+        </div>
+        <a href="#" class="recipe-link">Add to Calendar</a>
+      </div>
+      <!-- Add more breakfast items with onclick events as below -->
+      <div class="meal-item"
+        onclick="addEventToCalendar('Avocado Toast', '2023-09-11T08:30:00', 'Asia/Kolkata', 'Ingredients:\n1 avocado\n2 slices of whole grain bread\nSalt and pepper to taste\n\nInstructions:\nMash the avocado and spread it on toasted bread. Sprinkle with salt and pepper.')">
+        <img class="food-image" src="avacadotoast.jpg" alt="Avocado Toast">
+        <div class="food-info">
+          <p>Avocado Toast</p>
+          <p>Calories: 290</p>
+          <p>Contains: Protein, Fat, Sodium</p>
+        </div>
+        <a href="#" class="recipe-link">Add to Calendar</a>
+      </div>
+      <!-- Add more breakfast items as needed -->
+    </div>
+  </div>
+
+  <div class="meal-category">
+    <h2>Lunch</h2>
+    <div class="lunch-list">
+      <div class="meal-item"
+        onclick="addEventToCalendar('Roti', '2023-09-10T12:30:00', 'Asia/Kolkata', 'Ingredients:\n2 cups whole wheat flour\n1/2 teaspoon salt\nWater (as needed)\n\nInstructions:\nIn a mixing bowl, combine whole wheat flour and salt. Add water gradually and knead to form a soft and smooth dough. Divide the dough into small equal-sized balls. Roll each ball into a thin, round roti on a floured surface. Heat a tawa or skillet over medium-high heat. Place the rolled roti on the hot tawa and cook until bubbles appear on the surface. Flip the roti and cook the other side until golden brown spots appear. Remove from the tawa and apply a little ghee or butter (optional). Repeat the process for the remaining dough balls.')">
+        <img class="food-image" src="roti.jpg" alt="Roti">
+        <div class="food-info">
+          <p>Roti</p>
+          <p>Calories: 100</p>
+          <p>Contains: Carbohydrates, Fiber</p>
+        </div>
+        <a href="#" class="recipe-link">Add to Calendar</a>
+      </div>
+      <!-- Add more lunch items with onclick events as above -->
+    </div>
+  </div>
+
+  <div class="meal-category">
+    <h2>Dinner</h2>
+    <div class="dinner-list">
+      <div class="meal-item"
+        onclick="addEventToCalendar('Dal', '2023-09-10T19:00:00', 'Asia/Kolkata', 'Ingredients:\n1 cup lentils\n2 cups water\n1/2 teaspoon turmeric powder\nSalt to taste\n\nInstructions:\nBoil lentils with water, turmeric powder, and salt until soft. In a separate pan, heat oil, add cumin seeds, mustard seeds, and asafoetida. Add this to the boiled lentils. Simmer for a few minutes. Serve hot.')">
+        <img class="food-image" src="dal.jpg" alt="Dal">
+        <div class="food-info">
+          <p>Dal</p>
+          <p>Calories: 150</p>
+          <p>Contains: Protein, Fiber</p>
+        </div>
+        <a href="#" class="recipe-link">Add to Calendar</a>
+      </div>
+      <!-- Add more dinner items with onclick events as above -->
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    /* exported gapiLoaded */
+    /* exported gisLoaded */
+    /* exported handleAuthClick */
+    /* exported handleSignoutClick */
+
+    // TODO(developer): Set to client ID and API key from the Developer Console
+    const CLIENT_ID = '750997575902-j9nnjmquci9ljaoo0e5g6e1andbefue.apps.googleusercontent.com';
+    const API_KEY = 'AIzaSyBsnW-RB3Wout7wKv9DGyS4D7wcBB-f6dg';
+
+
+    // Discovery doc URL for APIs used by the quickstart
+    const DISCOVERY_DOC = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
+
+    // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
+    const SCOPES = "https://www.googleapis.com/auth/calendar";
+
+    let tokenClient;
+    let gapiInited = false;
+    let gisInited = false;
+
+    document.getElementById('authorize_button').style.visibility = 'hidden';
+    document.getElementById('signout_button').style.visibility = 'hidden';
+
+    /**
+     * Callback after api.js is loaded.
+     */
+    function gapiLoaded() {
+      gapi.load('client', initializeGapiClient);
+    }
+
+    /**
+     * Callback after the API client is loaded. Loads the discovery doc to initialize the API.
+     */
+    async function initializeGapiClient() {
+      await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: [DISCOVERY_DOC],
+      });
+      gapiInited = true;
+      maybeEnableButtons();
+    }
+
+    /**
+     * Callback after Google Identity Services are loaded.
+     */
+    function gisLoaded() {
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: '', // defined later
+      });
+      gisInited = true;
+      maybeEnableButtons();
+    }
+
+    /**
+     * Enables user interaction after all libraries are loaded.
+     */
+    function maybeEnableButtons() {
+      if (gapiInited && gisInited) {
+        document.getElementById('authorize_button').style.visibility = 'visible';
+      }
+    }
+
+    /**
+     * Sign in the user upon button click.
+     */
+    function handleAuthClick() {
+      tokenClient.callback = async (resp) => {
+        if (resp.error !== undefined) {
+          throw (resp);
+        }
+        document.getElementById('signout_button').style.visibility = 'visible';
+        document.getElementById('authorize_button').innerText = 'Refresh';
+        await listUpcomingEvents();
+      };
+
+      if (gapi.client.getToken() === null) {
+        // Prompt the user to select a Google Account and ask for consent to share their data
+        // when establishing a new session.
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+      } else {
+        // Skip display of the account chooser and consent dialog for an existing session.
+        tokenClient.requestAccessToken({ prompt: '' });
+      }
+    }
+
+    /**
+     * Sign out the user upon button click.
+     */
+    function handleSignoutClick() {
+      const token = gapi.client.getToken();
+      if (token !== null) {
+        google.accounts.oauth2.revoke(token.access_token);
+        gapi.client.setToken('');
+        document.getElementById('content').innerText = '';
+        document.getElementById('authorize_button').innerText = 'Authorize';
+        document.getElementById('signout_button').style.visibility = 'hidden';
+      }
+    }
+
+    /**
+     * Print the summary and start datetime/date of the next ten events in
+     * the authorized user's calendar. If no events are found, an
+     * appropriate message is printed.
+     */
+    async function listUpcomingEvents() {
+      let response;
+      try {
+        const request = {
+          'calendarId': 'primary',
+          'timeMin': (new Date()).toISOString(),
+          'showDeleted': false,
+          'singleEvents': true,
+          'maxResults': 10,
+          'orderBy': 'startTime',
+        };
+        response = await gapi.client.calendar.events.list(request);
+      } catch (err) {
+        document.getElementById('content').innerText = err.message;
+        return;
+      }
+
+      const events = response.result.items;
+      if (!events || events.length == 0) {
+        document.getElementById('content').innerText = 'No events found.';
+        return;
+      }
+      // Flatten to string to display
+      const output = events.reduce(
+        (str, event) => `${str}${event.summary} (${event.start.dateTime || event.start.date})\n`,
+        'Events:\n');
+
+      document.getElementById('content').innerText = output;
+    }
+
+    /**
+     * Add an event to the calendar.
+     * @param {string} summary - Event summary.
+     * @param {string} dateTime - Event start date and time in ISO format (e.g., '2023-09-10T07:00:00').
+     * @param {string} timeZone - Event time zone (e.g., 'Asia/Kolkata').
+     * @param {string} description - Event description.
+     */
+    async function addEventToCalendar(summary, dateTime, timeZone, description) {
+      const event = {
+        'summary': summary,
+        'description': description,
+        'start': {
+          'dateTime': dateTime,
+          'timeZone': timeZone
+        },
+        'end': {
+          'dateTime': dateTime,
+          'timeZone': timeZone
+        }
+      };
+
+      try {
+        const request = gapi.client.calendar.events.insert({
+          'calendarId': 'primary',
+          'resource': event
+        });
+
+        const response = await request.execute();
+        console.log('Event created: ' + response.htmlLink);
+        alert('Event added to your calendar!');
+      } catch (err) {
+        console.error('Error adding event to calendar: ' + err.message);
+        alert('An error occurred while adding the event to your calendar.');
+      }
+    }
+  </script>
+  
+  <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+  <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+
+</body>
+
+</html>

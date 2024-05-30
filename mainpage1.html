@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Reset default styles and add custom styles */
+        body, h1, h2, h3, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            margin: 20px 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: #fff;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 4);
+            margin: 20px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .grid-item {
+            display: flex;
+            align-items: center;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: auto;
+        }
+
+        .grid-text {
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .grid-text h2,
+        .grid-text p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .grid-text h2 {
+            font-size: 34px;
+            color: #333;
+            line-height: 1.3;
+            margin-bottom: 10px;
+        }
+
+        .grid-text p {
+            font-size: 21px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .btn {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 25px;
+            text-align: center;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Animation styles */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-20px);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(20px);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Welcome to Healthy Bite</h1>
+    <div class="grid-container">
+        <div class="grid-item">
+            <img src="image1.jpg" alt="Nutrition Image">
+        </div>
+        <div class="grid-item">
+            <div class="grid-text animate-fade-in">
+                <p>Explore our wide range of nutritious recipes to fuel your body with goodness. Your Source for Nutritional Excellence. At Healthy Bite, we are dedicated to providing you with the knowledge and tools you need to make informed choices about your nutrition and well-being. Our mission is to empower you on your journey to a healthier and happier lifestyle.</p>
+                <a href="description.html"><button id="get-started-btn" class="btn">Get Started</button></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <img src="image3.jpg" alt="Fitness Image">
+        </div>
+        <div class="grid-item">
+            <div class="grid-text animate-slide-in-left">
+                <h2>Discover Our Fitness Foods</h2>
+                <p>your ultimate source for optimizing your fitness journey through nutrition. We're here to empower you with the knowledge and delicious fuel you need to crush your gym sessions and achieve your fitness goals. Discover a wide range of carefully curated recipes, meal plans, and nutritional insights tailored to support your muscle gains, fat loss, and overall well-being. Join us in the pursuit of a healthier, fitter you, one satisfying bite at a time!".</p>
+                <a href="selection.html"><button id="get-started-btn" class="btn">Get Started</button></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <img src="image4.jpg" alt="Nutrition for Children Image">
+        </div>
+        <div class="grid-item">
+            <div class="grid-text animate-slide-in-right">
+                <h2>Nutrition for Babies and Children</h2>
+                <p>Empower the growth and development of your little ones with our specialized nutritional guidance for children. From infancy to early adolescence, we provide insights into nurturing healthy eating habits that will set the foundation for a lifetime of well-being.</p>
+                <a href="selection.html"><button id="get-started-btn" class="btn">Get Started</button></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <img src="image5.jpg" alt="Nutrition for Elderly Image">
+        </div>
+        <div class="grid-item">
+            <div class="grid-text animate-fade-in">
+                <h2>Nutrition for the Golden Years</h2>
+                <p>Discover how to nourish your body in its golden years. Our comprehensive resources focus on providing the essential nutrients and dietary considerations that support healthy aging. Whether you're looking to manage specific health conditions or simply enjoy a fulfilling and vibrant life, our insights are designed to enhance your well-being and vitality in later stages of life.</p>
+                <a href="selection.html"><button id="get-started-btn" class="btn">Get Started</button></a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

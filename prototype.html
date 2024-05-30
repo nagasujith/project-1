@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Google Calendar and Food Recipes</title>
+  <meta charset="utf-8" />
+  <style>
+    /* Your CSS styles here */
+  </style>
+</head>
+
+<body>
+  <h1>Breakfast Foods</h1>
+  <!-- Add your meal categories and food items here as in your original code -->
+
+  <!-- Example: Add a button to add Kefir Smoothie to the calendar -->
+  <div class="meal-item">
+    <img class="food-image" src="kefirsmoothie.jpg" alt="Kefir Smoothie">
+    <div class="food-info">
+      <p>Kefir Smoothie</p>
+      <p>Calories: 120</p>
+      <p>Contains: Vitamin A, Fiber</p>
+    </div>
+    <button onclick="addFoodToCalendar('Kefir Smoothie', '2023-09-10T07:00:00', 'Asia/Kolkata')">Add to Calendar</button>
+  </div>
+
+  <!-- Example: Add a button to add Avocado Toast to the calendar -->
+  <div class="meal-item">
+    <img class="food-image" src="avacadotoast.jpg" alt="Avocado Toast">
+    <div class="food-info">
+      <p>Avocado Toast</p>
+      <p>Calories: 290</p>
+      <p>Contains: Protein, Fat, Sodium</p>
+    </div>
+    <button onclick="addFoodToCalendar('Avocado Toast', '2023-09-11T08:30:00', 'Asia/Kolkata')">Add to Calendar</button>
+  </div>
+
+  <!-- Add more food items with buttons as needed -->
+  <p>Google Calendar API Quickstart</p>
+
+  <!-- Add buttons to initiate auth sequence and sign out -->
+  <button id="authorize_button" onclick="handleAuthClick()">Authorize</button>
+  <button id="signout_button" onclick="handleSignoutClick()">Sign Out</button>
+
+  <pre id="content" style="white-space: pre-wrap;"></pre>
+
+  <script type="text/javascript">
+    /* exported gapiLoaded */
+    /* exported gisLoaded */
+    /* exported handleAuthClick */
+    /* exported handleSignoutClick */
+
+    // TODO(developer): Set to client ID and API key from the Developer Console
+    const CLIENT_ID = '750997575902-q14tf9sau40kulavjuvh1qannvb3v62p.apps.googleusercontent.com';
+    const API_KEY = 'YAIzaSyBsnW-RB3Wout7wKv9DGyS4D7wcBB-f6dg';
+
+    // Discovery doc URL for APIs used by the quickstart
+    const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
+
+    // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
+    const SCOPES = 'https://www.googleapis.com/auth/calendar';
+
+    let tokenClient;
+    let gapiInited = false;
+    let gisInited = false;
+
+    document.getElementById('authorize_button').style.visibility = 'hidden';
+    document.getElementById('signout_button').style.visibility = 'hidden';
+
+    /**
+     * Callback after api.js is loaded.
+     */
+    function gapiLoaded() {
+      gapi.load('client', initializeGapiClient);
+    }
+
+    /**
+     * Callback after the API client is loaded. Loads the discovery doc to initialize the API.
+     */
+    async function initializeGapiClient() {
+      await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: [DISCOVERY_DOC],
+      });
+      gapiInited = true;
+      maybeEnableButtons();
+    }
+
+    /**
+     * Callback after Google Identity Services are loaded.
+     */
+    function gisLoaded() {
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: '', // defined later
+      });
+      gisInited = true;
+      maybeEnableButtons();
+    }
+
+    /**
+     * Enables user interaction after all libraries are loaded.
+     */
+    function maybeEnableButtons() {
+      if (gapiInited && gisInited) {
+        document.getElementById('authorize_button').style.visibility = 'visible';
+      }
+    }
+
+    /**
+     * Sign in the user upon button click.
+     */
+    function handleAuthClick() {
+      tokenClient.callback = async (resp) => {
+        if (resp.error !== undefined) {
+          throw (resp);
+        }
+        document.getElementById('signout_button').style.visibility = 'visible';
+        document.getElementById('authorize_button').innerText = 'Refresh';
+        await listUpcomingEvents();
+      };
+
+      if (gapi.client.getToken() === null) {
+        // Prompt the user to select a Google Account and ask for consent to share their data
+        // when establishing a new session.
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+      } else {
+        // Skip display of the account chooser and consent dialog for an existing session.
+        tokenClient.requestAccessToken({ prompt: '' });
+      }
+    }
+
+    /**
+     * Sign out the user upon button click.
+     */
+    function handleSignoutClick() {
+      const token = gapi.client.getToken();
+      if (token !== null) {
+        google.accounts.oauth2.revoke(token.access_token);
+        gapi.client.setToken('');
+        document.getElementById('content').innerText = '';
+        document.getElementById('authorize_button').innerText = 'Authorize';
+        document.getElementById('signout_button').style.visibility = 'hidden';
+      }
+    }
+
+    /**
+     * Print the summary and start datetime/date of the next ten events in
+     * the authorized user's calendar. If no events are found, an
+     * appropriate message is printed.
+     */
+    async function listUpcomingEvents() {
+      let response;
+      try {
+        const request = {
+          'calendarId': 'primary',
+          'timeMin': (new Date()).toISOString(),
+          'showDeleted': false,
+          'singleEvents': true,
+          'maxResults': 10,
+          'orderBy': 'startTime',
+        };
+        response = await gapi.client.calendar.events.list(request);
+      } catch (err) {
+        document.getElementById('content').innerText = err.message;
+        return;
+      }
+
+      const events = response.result.items;
+      if (!events || events.length == 0) {
+        document.getElementById('content').innerText = 'No events found.';
+        return;
+      }
+      // Flatten to string to display
+      const output = events.reduce(
+        (str, event) => `${str}${event.summary} (${event.start.dateTime || event.start.date})\n`,
+        'Events:\n');
+
+      document.getElementById('content').innerText = output;
+
+      // Create custom events
+      const d = new Date();
+      const customEvents = [
+        {
+          'summary': 'Breakfast: Kefir Smoothie',
+          'description': 'Ingredients:\n1 cup kefir\n1 banana\n1/2 cup mixed berries\n1 tablespoon honey\n\nInstructions:\nBlend all the ingredients until smooth. Pour into a glass and enjoy!',
+          'start': {
+            'dateTime': `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}T07:00:00`,
+            'timeZone': 'Asia/Kolkata'
+          },
+          'recurrence': [
+            'RRULE:FREQ=DAILY;COUNT=2'
+          ],
+          'attendees': [
+            { 'email': 'zenithsujith@Gmail.com' },
+            { 'email': 'sbrin@example.com' }
+          ],
+          'reminders': {
+            'useDefault': false,
+            'overrides': [
+              { 'method': 'email', 'minutes': 24 * 60 },
+              { 'method': 'popup', 'minutes': 10 }
+            ]
+          }
+        },
+        {
+          'summary': 'Lunch: Roti',
+          'description': 'Ingredients:\n2 cups whole wheat flour\n1/2 teaspoon salt\nWater (as needed)\n\nInstructions:\nIn a mixing bowl, combine whole wheat flour and salt. Add water gradually and knead to form a soft and smooth dough. Divide the dough into small equal-sized balls. Roll each ball into a thin, round roti on a floured surface. Heat a tawa or skillet over medium-high heat. Place the rolled roti on the hot tawa and cook until bubbles appear on the surface. Flip the roti and cook the other side until golden brown spots appear. Remove from the tawa and apply a little ghee or butter (optional). Repeat the process for the remaining dough balls.',
+          'start': {
+            'dateTime': `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}T12:30:00`,
+            'timeZone': 'Asia/Kolkata'
+          },
+          'recurrence': [
+            'RRULE:FREQ=DAILY;COUNT=2'
+          ],
+          'attendees': [
+            { 'email': 'zenithsujith@Gmail.com' },
+            { 'email': 'sbrin@example.com' }
+          ],
+          'reminders': {
+            'useDefault': false,
+            'overrides': [
+              { 'method': 'email', 'minutes': 24 * 60 },
+              { 'method': 'popup', 'minutes': 10 }
+            ]
+          }
+        }
+      ];
+
+      // Insert custom events
+      customEvents.forEach((event) => {
+        const request = gapi.client.calendar.events.insert({
+          'calendarId': 'primary',
+          'resource': event
+        });
+
+        request.execute(function (event) {
+          appendPre('Event created: ' + event.htmlLink);
+        });
+      });
+    }
+  </script>
+  <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+  <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+    
+    
+  </script>
+
+</body>
+
+</html>

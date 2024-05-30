@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="refresh" content="60">
+    <title>WELCOME TO HealthyBite</title>
+
+    <style>
+        body {
+            background-color: white;
+            background-image: url('./img/sujith.jpeg');
+            background-repeat: no-repeat;
+            height: auto;
+            background-size: 100%;
+
+
+        }
+
+        h2 {
+            color: blue;
+            top:2px;
+
+        }
+
+        form {
+            background-color: black;
+
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60vh;
+        }
+
+        form {
+            align-items: center;
+            width: 300px;
+            padding: 10px;
+            background-color: burlywood;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-decoration-color: antiquewhite;
+        }
+
+        form label,
+        form input,
+        form button {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="image-container">
+
+        <div class="image-overlay">
+            <h2 align="center">Welcome to HealthyBite</h2>
+            <h2 align="center">Signup form</h2>
+
+            <div class="container">
+                <form action="selection.html" method="POST" action="submit_form.php">
+
+                    <div>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" maxlength="20" required>
+                        <span class="error" id="nameError"></span>
+                    </div>
+                    <div>
+                        <label for="age">Age:</label>
+                        <input type="number" id="age" name="age" max="29" min="1" required>
+                        <span class="error" id="ageError"></span>
+                    </div>
+                    <div>
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+                        <span class="error" id="phoneError"></span>
+                    </div>
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div>
+                        <label for="Country">Country:</label>
+                        <select id="country" name="country">
+                            <option value="au">Australia</option>
+                            <option value="ca">Canada</option>
+                            <option value="usa">USA</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit">Click me</button>
+
+                    </div>
+            </div>
+        </div>
+
+        </form>
+
+
+
+
+        <script>
+
+
+            const form = document.getElementById('signupForm');
+            const nameInput = document.getElementById('name');
+            const ageInput = document.getElementById('age');
+            const phoneInput = document.getElementById('phone');
+            const nameError = document.getElementById('nameError');
+            const ageError = document.getElementById('ageError');
+            const phoneError = document.getElementById('phoneError');
+
+            form.addEventListener('submit', function (event) {
+                nameError.textContent = '';
+                ageError.textContent = '';
+                phoneError.textContent = '';
+                nameInput.classList.remove('error-border');
+                ageInput.classList.remove('error-border');
+                phoneInput.classList.remove('error-border');
+
+                if (nameInput.value.length > 20) {
+                    nameError.textContent = 'Name should be maximum 20 characters long.';
+                    nameInput.classList.add('error-border');
+                    event.preventDefault();
+                }
+
+                if (ageInput.value >= 30) {
+                    ageError.textContent = 'Age must be below 30.';
+                    ageInput.classList.add('error-border');
+                    event.preventDefault();
+                }
+
+                if (!/^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(phoneInput.value)) {
+                    phoneError.textContent = 'Please enter a valid Indian phone number.';
+                    phoneInput.classList.add('error-border');
+                    event.preventDefault();
+                }
+            });
+            document.addEventListener("DOMContentLoaded", function(event) {
+  //Removing article link when on mobiforge
+  console.log(document.referrer);
+  if (parent !== window && document.referrer.indexOf('https://mobiforge.com') === 0 && document.referrer.indexOf('http://mobiforge.com') === 0)
+  {  
+    console.log(document.referrer);
+    document.getElementById('article-link').className = "fade-out";
+  }
+
+});
+
+
+
+        </script>
+
+</body>
+
+</html>

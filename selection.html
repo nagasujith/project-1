@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="refresh" content="60">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-image: url('fitness and nutrition.jpg'); /* Replace with your image URL */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      font-family: Arial, sans-serif;
+    }
+
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .form-container h2 {
+      margin-bottom: 20px;
+      color: #16a085;
+    }
+
+    .form-container label,
+    .form-container input,
+    .form-container select,
+    .form-container textarea,
+    .form-container button {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .btn {
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background-color: #c0392b;
+    }
+  </style>
+  <title>YourNutritionSite</title>
+</head>
+<body>
+  <div class="form-container">
+    <div class="welcome-container">
+      <h1>Welcome to The EpicureAge</h1>
+      <p>Thank you for joining our community!</p>
+      <button id="get-started-btn" class="btn">Get Started</button>
+    </div>
+
+    <div class="profile-container" style="display: none;">
+      <h2>Profile Setup</h2>
+      <form id="profile-form" action="submit.php" method="post">
+        
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <span class="error" id="name-error"></span>
+        
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" min="1" max="120" required>
+        <span class="error" id="age-error"></span>
+        
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+        <span class="error" id="phone-error"></span>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <span class="error" id="email-error"></span>
+        
+        <label for="country">Country:</label>
+        <select id="country" name="country" required>
+          <option value="">Select a country</option>
+          <option value="India">India</option>
+          <option value="USA">USA</option>
+          <option value="UK">UK</option>
+          <!-- Add more countries as needed -->
+        </select>
+        
+        <button type="button" id="next-btn" class="btn">Next</button>
+      </form>
+    </div>
+
+    <div class="segment-container" style="display: none;">
+      <h2>Select Your Segment</h2>
+      <div class="segment-options">
+        <button class="segment-btn" data-segment="children">Children</button>
+        <button class="segment-btn" data-segment="adolescent">Adolescent</button>
+        <button class="segment-btn" data-segment="old">Old</button>
+        <button class="segment-btn" data-segment="gym">Gym</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const getStartedBtn = document.getElementById("get-started-btn");
+    const profileContainer = document.querySelector(".profile-container");
+    const nextBtn = document.getElementById("next-btn");
+    const segmentContainer = document.querySelector(".segment-container");
+    const segmentButtons = document.querySelectorAll(".segment-btn");
+
+    getStartedBtn.addEventListener("click", () => {
+      getStartedBtn.style.display = "none";
+      profileContainer.style.display = "block";
+    });
+
+    nextBtn.addEventListener("click", () => {
+      const nameInput = document.getElementById("name");
+      const ageInput = document.getElementById("age");
+      const phoneInput = document.getElementById("phone");
+      const emailInput = document.getElementById("email");
+      const countryInput = document.getElementById("country");
+      let isValid = true;
+
+      // Form validation
+      if (!/^[a-zA-Z\s]+$/.test(nameInput.value.trim())) {
+        document.getElementById("name-error").textContent = "Name must contain only letters.";
+        isValid = false;
+      } else {
+        document.getElementById("name-error").textContent = "";
+      }
+
+      if (!/^\d{10}$/.test(phoneInput.value)) {
+        document.getElementById("phone-error").textContent = "Invalid phone number (10 digits).";
+        isValid = false;
+      } else {
+        document.getElementById("phone-error").textContent = "";
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+        document.getElementById("email-error").textContent = "Invalid email address.";
+        isValid = false;
+      } else {
+        document.getElementById("email-error").textContent = "";
+      }
+
+      if (ageInput.value < 1 || ageInput.value > 120) {
+        document.getElementById("age-error").textContent = "Age must be between 1 and 120.";
+        isValid = false;
+      } else {
+        document.getElementById("age-error").textContent = "";
+      }
+
+      if (!countryInput.value) {
+        isValid = false;
+      }
+
+      if (isValid) {
+        profileContainer.style.display = "none";
+        segmentContainer.style.display = "block";
+      }
+    });
+
+    segmentButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        const selectedSegment = button.getAttribute("data-segment");
+        let redirectUrl;
+
+        switch (selectedSegment) {
+          case "children":
+            redirectUrl = "childfood.html"; // Replace with the actual URL
+            break;
+          case "adolescent":
+            redirectUrl = "adolescent.html"; // Replace with the actual URL
+            break;
+          case "old":
+            redirectUrl = "old.html"; // Replace with the actual URL
+            break;
+          case "gym":
+            redirectUrl = "gym.html"; // Replace with the actual URL
+            break;
+          default:
+            redirectUrl = "default.html"; // Replace with the default URL
+        }
+
+        window.location.href = redirectUrl;
+      });
+    });
+  </script>
+</body>
+</html>

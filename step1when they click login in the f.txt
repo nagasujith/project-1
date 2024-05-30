@@ -1,0 +1,11 @@
+step1:when they click login in the front page they must go to a page where they can see the option of 3
+1)baby
+2)adolescense
+a)gym people
+b)athletes
+3)old age
+step2:they have an option to choose and when they click the option they have to create an account to visit it
+
+step 3: creating a login page for 0to 5 people and adolescense age and old age people and gym going people
+step 4:creating a data base or table for all the above things and giving it a link to check everything
+step5:create or finding a way to select those items and keep in their calendar  
